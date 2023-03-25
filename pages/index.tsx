@@ -3,10 +3,22 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import Link from 'next/link';
+import { GetServerSidePropsContext, NextPageContext } from 'next';
+import { UAParser } from 'ua-parser-js';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+type Props = {
+  browser: {
+    name: string;
+    version: string;
+    major: string;
+  };
+};
+
+export default function Home(props: Props) {
+  const { browser } = props;
+
   return (
     <>
       <Head>
@@ -17,8 +29,21 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <h1>This is MAIN PAGE</h1>
+        <h1>request from browse: {browser.name}</h1>
         <Link href={'/posts/first_post'}>first post </Link>
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const ua = context.req.headers['user-agent'];
+  const parser = new UAParser(ua);
+  let parserResult = parser.getResult();
+
+  return {
+    props: {
+      browser: parserResult.browser,
+    },
+  };
 }
