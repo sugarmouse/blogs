@@ -4,8 +4,5 @@
         "source.fixAll": true
     },
     "editor.formatOnSave": true,
-    "prettier.disableLanguages": [
-        "js"
-    ],
     "editor.tabSize": 2
 }
