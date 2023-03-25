@@ -1,5 +1,5 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import getPosts from '@/lib/posts/posts';
+import { getPosts } from '@/lib/posts/posts';
 
 const Post: NextApiHandler = async (
   req: NextApiRequest,

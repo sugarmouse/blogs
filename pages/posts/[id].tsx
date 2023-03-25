@@ -1,22 +1,21 @@
 import { getPost, getPostIds } from '@/lib/posts/posts';
 import { GetStaticPropsContext, NextPage } from 'next';
+import parse from 'html-react-parser';
 
 type Props = {
   post: PostWithContent;
 };
 
-const BlogContent: NextPage<Props> = (props) => {
+export default function BlogContent(props: Props) {
   const { post } = props;
 
   return (
     <>
       <h1>{post.title}</h1>
-      <article>{post.content}</article>
+      <article>{parse(post.htmlContent)}</article>
     </>
   );
-};
-
-export default BlogContent;
+}
 
 export async function getStaticProps(context: any) {
   const id = context.params.id;

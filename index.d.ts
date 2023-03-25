@@ -6,4 +6,5 @@ interface Post {
 
 interface PostWithContent extends Post {
   content: string;
+  htmlContent: string;
 }

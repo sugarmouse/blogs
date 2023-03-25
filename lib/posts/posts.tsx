@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import matter from 'gray-matter';
+import { marked } from 'marked';
 
 const markdownDir = path.join(process.cwd(), 'markdown');
 
@@ -32,7 +33,9 @@ export async function getPost(id: string) {
     content,
   } = matter(text);
 
-  return JSON.parse(JSON.stringify({ id, title, date, content }));
+  const htmlContent = marked(content);
+
+  return JSON.parse(JSON.stringify({ id, title, date, content, htmlContent }));
 }
 
 export async function getPostIds() {
