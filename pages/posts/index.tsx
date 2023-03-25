@@ -1,5 +1,6 @@
 import { GetStaticProps, NextPage } from 'next';
-import getPosts from '@/lib/posts/posts';
+import { getPosts } from '@/lib/posts/posts';
+import Link from 'next/link';
 
 type Props = {
   posts: Post[];
@@ -11,7 +12,9 @@ const PostsIndex: NextPage<Props> = (props) => {
     <>
       <h1>Pages Index</h1>
       {posts.map((p) => (
-        <div key={p.id}>{p.title}</div>
+        <Link key={p.id} href={`/posts/${p.id}`}>
+          <div>{p.title}</div>
+        </Link>
       ))}
     </>
   );
