@@ -1,9 +1,10 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
+import { Inter } from 'next/font/google';
+import styles from '@/styles/Home.module.css';
+import Link from 'next/link';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return (
@@ -16,7 +17,8 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <h1>This is MAIN PAGE</h1>
+        <Link href={'/posts/first_post'}>first post </Link>
       </main>
     </>
-  )
+  );
 }
