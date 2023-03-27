@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev & babel -w ./src --out-dir dist --extensions .ts,.tsx",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typeorm:build": "babel -w ./src --out-dir dist --extensions .ts,.tsx",
+    "migration:run": "typeorm migration:run -d ./dist/data-source.js",
+    "migration:revert": "typeorm migration:revert -d ./dist/data-source.js"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
