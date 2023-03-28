@@ -40,5 +40,3 @@ next-env.d.ts
 
 # mock data
 /blog-data/
-
-# typeorm build file
