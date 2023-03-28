@@ -11,12 +11,12 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: false,
     entities: [
-        'dist/entity/**/*.js'
+        './dist/entity/**/*.js'
     ],
     migrations: [
-        'dist/migration/**/*.js'
+        './dist/migration/**/*.js'
     ],
     subscribers: [
-        'dist/subscribers/**/*.js'
+        './dist/subscribers/**/*.js'
     ]
 });

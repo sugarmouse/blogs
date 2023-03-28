@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typeorm:build": "babel -w ./src --out-dir dist --extensions .ts,.tsx",
+    "migration:create": "typeorm migration:create src/migration/$NAME",
     "migration:run": "typeorm migration:run -d ./dist/data-source.js",
     "migration:revert": "typeorm migration:revert -d ./dist/data-source.js",
     "entity:create": "typeorm entity:create ./src/entity/$NAME",
