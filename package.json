@@ -10,7 +10,8 @@
     "typeorm:build": "babel -w ./src --out-dir dist --extensions .ts,.tsx",
     "migration:run": "typeorm migration:run -d ./dist/data-source.js",
     "migration:revert": "typeorm migration:revert -d ./dist/data-source.js",
-    "entity:create": "typeorm entity:create ./src/entity/$NAME"
+    "entity:create": "typeorm entity:create ./src/entity/$NAME",
+    "dbseed": "node ./dist/seed.js"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",

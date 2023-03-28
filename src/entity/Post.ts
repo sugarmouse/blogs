@@ -11,4 +11,8 @@ export class Post {
 
   @Column('text')
   content: string;
+
+  constructor(blogData: Omit<Post, 'id'>) {
+    Object.assign(this, blogData);
+  }
 }
