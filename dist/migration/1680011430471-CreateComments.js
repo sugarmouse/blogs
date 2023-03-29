@@ -28,6 +28,7 @@ var CreateComments1680011430471 = /*#__PURE__*/function () {
                   columns: [{
                     name: 'id',
                     type: 'int',
+                    isGenerated: true,
                     generationStrategy: 'increment',
                     isPrimary: true
                   }, {

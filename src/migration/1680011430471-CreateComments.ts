@@ -6,7 +6,7 @@ export class CreateComments1680011430471 implements MigrationInterface {
         await queryRunner.createTable(new Table({
             name: 'comments',
             columns: [
-                { name: 'id', type: 'int', generationStrategy: 'increment', isPrimary: true },
+                { name: 'id', type: 'int', isGenerated: true, generationStrategy: 'increment', isPrimary: true },
                 { name: 'user_id', type: 'int' },
                 { name: 'post_id', type: 'int' },
                 { name: 'content', type: 'text' }
