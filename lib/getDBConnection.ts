@@ -1,7 +1,8 @@
 import { AppDataSource } from "@/src/data-source";
+import 'reflect-metadata';
 
 const promise = (async () => {
-  return await AppDataSource.initialize();
+  return AppDataSource.initialize();
 })();
 
 export async function getDatabaseConnection() {

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import { UAParser } from 'ua-parser-js';
 import { getDatabaseConnection } from '@/lib/getDBConnection';
+import { Post } from '@/src/entity/Post';
 
 type Props = {
   browser: {
@@ -35,6 +36,8 @@ export default function Home(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const connection = await getDatabaseConnection();
+  const posts = await connection.manager.find(Post);
+  console.log(posts);
 
   const ua = context.req.headers['user-agent'];
   const parser = new UAParser(ua);
