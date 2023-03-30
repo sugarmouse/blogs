@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
 import Link from 'next/link';
-import { GetServerSidePropsContext, NextPageContext } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import { UAParser } from 'ua-parser-js';
+import { getDatabaseConnection } from '@/lib/getDBConnection';
 
 type Props = {
   browser: {
@@ -34,6 +34,8 @@ export default function Home(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const connection = await getDatabaseConnection();
+
   const ua = context.req.headers['user-agent'];
   const parser = new UAParser(ua);
   let parserResult = parser.getResult();
