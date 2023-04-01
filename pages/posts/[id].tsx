@@ -1,9 +1,9 @@
-import { getPost, getPostIds } from '@/lib/posts/posts';
-import { GetStaticPropsContext, NextPage } from 'next';
-import parse from 'html-react-parser';
+import { GetServerSideProps } from 'next';
+import { getDatabaseConnection } from '@/lib/getDBConnection';
+import { Post } from '@/src/entity/Post';
 
 type Props = {
-  post: PostWithContent;
+  post: PostType;
 };
 
 export default function BlogContent(props: Props) {
@@ -12,37 +12,24 @@ export default function BlogContent(props: Props) {
   return (
     <>
       <h1>{post.title}</h1>
-      <article>{parse(post.htmlContent)}</article>
+      <article>{post.content}</article>
     </>
   );
 }
 
-export async function getStaticProps(context: any) {
-  const id = context.params.id;
-  const post = await getPost(id);
-
+export const getServerSideProps: GetServerSideProps<
+  any,
+  { id: string }
+> = async (context) => {
+  const connection = await getDatabaseConnection();
+  const post = await connection.manager.findOne(Post, {
+    where: {
+      id: parseInt(context.params.id),
+    },
+  });
   return {
     props: {
-      post: post,
+      post: JSON.parse(JSON.stringify(post)),
     },
   };
-}
-
-export async function getStaticPaths() {
-  const idList = await getPostIds();
-
-  idList.map((id) => {
-    return {
-      params: { id },
-    };
-  });
-
-  return {
-    paths: idList.map((id) => ({
-      params: {
-        id,
-      },
-    })),
-    fallback: false,
-  };
-}
+};

@@ -1,10 +1,7 @@
-import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
-import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
-import { UAParser } from 'ua-parser-js';
 import { getDatabaseConnection } from '@/lib/getDBConnection';
 import { Post } from '@/src/entity/Post';
+import Link from 'next/link';
 
 type Props = {
   posts: PostType[];
@@ -15,12 +12,12 @@ export default function Home(props: Props) {
 
   return (
     <>
-      <main className={styles.main}>
-        <h1>This is MAIN PAGE</h1>
-        {posts.map((post) => (
+      <h1>This is MAIN PAGE</h1>
+      {posts.map((post) => (
+        <Link key={post.id} href={`/posts/${post.id}`}>
           <div key={post.id}>{post.title}</div>
-        ))}
-      </main>
+        </Link>
+      ))}
     </>
   );
 }
