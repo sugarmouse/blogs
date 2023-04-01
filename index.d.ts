@@ -1,10 +1,10 @@
-interface Post {
-  id: string;
-  title: string;
-  date: string;
-}
-
-interface PostWithContent extends Post {
-  content: string;
-  htmlContent: string;
+interface PostType {
+  id: string,
+  created_at: string,
+  updated_at: string,
+  title: string,
+  content: string,
+  author_id: string,
+  author: undefined,
+  comments: undefined;
 }
