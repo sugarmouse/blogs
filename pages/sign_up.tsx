@@ -8,29 +8,36 @@ export default function SignUp() {
     passwordConfirmation: '',
   });
 
-  const [errors, setErrors] = useState({
+  const defaultErrors = {
     username: [],
     password: [],
     passwordConfirmation: [],
-  });
+  };
 
-  const onSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-      console.log(formData);
-      axios.post(`/api/v1/users`, formData).then(
-        () => {},
-        (error) => {
-          if (error instanceof AxiosError && error.response.status === 422) {
-            const { response } = error;
-            const a = response.data;
-            setErrors({ ...errors, ...response.data });
-          }
+  const [errors, setErrors] = useState(defaultErrors);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    axios.post(`/api/v1/users`, formData).then(
+      () => {
+        // sccess handle
+        console.log('success function execuated');
+        setErrors(defaultErrors);
+      },
+      (error) => {
+        // error handle
+        console.log('error function execuated');
+        if (error instanceof AxiosError && error.response.status === 422) {
+          const { response } = error;
+          const { data } = response;
+          console.log(data);
+          setErrors({ ...errors, ...data });
+        } else {
+          console.log('some other errors');
         }
-      );
-    },
-    [formData]
-  );
+      }
+    );
+  };
 
   return (
     <>
@@ -53,6 +60,9 @@ export default function SignUp() {
               }
             />
           </label>
+          {errors.username && errors.username.length > 0 ? (
+            <div>{errors.username.join(',')}</div>
+          ) : null}
         </div>
 
         <div>
@@ -69,6 +79,9 @@ export default function SignUp() {
               }
             />
           </label>
+          {errors.password && errors.password.length > 0 ? (
+            <div>{errors.password.join(',')}</div>
+          ) : null}
         </div>
 
         <div>
@@ -85,6 +98,10 @@ export default function SignUp() {
               }
             />
           </label>
+          {errors.passwordConfirmation &&
+          errors.passwordConfirmation.length > 0 ? (
+            <div>{errors.passwordConfirmation.join(',')}</div>
+          ) : null}
         </div>
 
         <div>
