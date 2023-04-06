@@ -2,6 +2,7 @@ import { getDatabaseConnection } from '@/lib/getDBConnection';
 import { User } from '@/src/entity/User';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import md5 from 'md5';
+import { CannotExecuteNotConnectedError, QueryFailedError } from 'typeorm';
 
 const Users: NextApiHandler = async (
   req: NextApiRequest,
@@ -31,6 +32,13 @@ const Users: NextApiHandler = async (
   if (password !== passwordConfirmation) {
     errors.passwordConfirmation.push('密码不匹配');
   }
+  const connection = await getDatabaseConnection();
+  const isUserDupicated = connection.manager.findOne(User, {
+    where: { username },
+  });
+  if (isUserDupicated) {
+    errors.username.push('用户名已存在，换一个试试吧');
+  }
 
   const hasErrors = Object.values(errors).find((v) => v.length > 0);
   res.setHeader('Content-type', 'application/json; charset=utf-8');
@@ -39,11 +47,19 @@ const Users: NextApiHandler = async (
     res.write(JSON.stringify(errors));
     res.end();
   } else {
-    const connection = await getDatabaseConnection();
     const user = new User();
     user.username = username;
     user.password_digest = md5(password);
-    await connection.manager.save(user);
+    try {
+      await connection.manager.save(user);
+    } catch (e) {
+      if (e instanceof QueryFailedError) {
+        console.log('-------------------');
+        console.log(Object.keys(e));
+        console.log(e.message);
+        console.log('-------------------');
+      }
+    }
     res.statusCode = 200;
     res.write(JSON.stringify(user));
     res.end();
