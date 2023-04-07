@@ -123,6 +123,20 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.Column)('
     value: function generatePasswordDigest() {
       this.password_digest = (0, _md["default"])(this.password);
     }
+
+    // toJSON method -> define how to serialize the instance of this class with JSON.stringfy
+  }, {
+    key: "toJSON",
+    value: function toJSON() {
+      var _this2 = this;
+      var returnUser = {};
+      Object.keys(this).forEach(function (key) {
+        if (!["password", 'password_digest', 'passwordConfirmation', 'errors'].includes(key)) {
+          returnUser[key] = _this2[key];
+        }
+      });
+      return returnUser;
+    }
   }]);
   return User;
 }(_BasicEntity2.BasicEntity), (_descriptor = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "username", [_dec2], {

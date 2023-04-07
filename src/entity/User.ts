@@ -68,4 +68,15 @@ export class User extends BasicEntity {
     this.password_digest = md5(this.password);
   }
 
+  // toJSON method -> define how to serialize the instance of this class with JSON.stringfy
+  toJSON() {
+    const returnUser = {};
+    Object.keys(this).forEach(key => {
+      if (!["password", 'password_digest', 'passwordConfirmation', 'errors'].includes(key)) {
+        returnUser[key] = this[key];
+      }
+    });
+    return returnUser;
+  }
+
 }
