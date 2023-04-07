@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 
 export default function SignUp() {
@@ -21,16 +21,20 @@ export default function SignUp() {
     axios.post(`/api/v1/users`, formData).then(
       () => {
         // sccess handle
-        console.log('success function execuated');
         setErrors(defaultErrors);
+        window.alert('注册成功');
+        window.location.href = '/sign_in';
       },
       (error) => {
         // error handle
-        console.log('error function execuated');
-        if (error instanceof AxiosError && error.response.status === 422) {
-          const { response } = error;
-          const { data } = response;
-          console.log(data);
+        if (
+          error instanceof AxiosError &&
+          error.response &&
+          error.response.status === 422
+        ) {
+          const {
+            response: { data },
+          } = error;
           setErrors({ ...errors, ...data });
         } else {
           console.log('some other errors');
