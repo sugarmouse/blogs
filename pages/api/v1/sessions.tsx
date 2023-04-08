@@ -10,34 +10,57 @@ export default async function Sessions(
   // get user info from clinet req
   const { username, password } = req.body;
   res.setHeader('Content-type', 'application/json; charset=utf-8');
-  const errors = { password: [], username: [] };
 
-  const connection = await getDatabaseConnection();
-  const user = await connection.manager.findOne(User, { where: { username } });
-  console.log(`username is xxxx${username}xxxx`);
-
-  if (user) {
-    // check the password
-    if (md5(password) === user.password_digest) {
-      res.statusCode = 200;
-      res.end(JSON.stringify(user));
-    } else {
-      res.statusCode = 422;
-      errors.password.push('密码和用户名不匹配');
-      res.end(JSON.stringify(errors));
-    }
-  } else {
-    if (username === '') {
-      // username is ''
-      res.statusCode = 422;
-      errors.username.push('用户名不能为空');
-      res.end(JSON.stringify(errors));
-      return;
-    }
-    // user not found
+  const sigInChecker = new SignInChecker(username, password);
+  await sigInChecker.validate();
+  if (sigInChecker.hasErrors()) {
     res.statusCode = 422;
-    errors.username.push('用户名不存在');
-    res.end(JSON.stringify(errors));
+    res.end(JSON.stringify(sigInChecker.errors));
     return;
+  } else {
+    res.statusCode = 200;
+    res.end(JSON.stringify(sigInChecker.user));
+    return;
+  }
+}
+
+// todo -> put this to sigle file (but a little bug will show)
+// ReferenceError: Cannot access 'User' before initialization at Module.User
+class SignInChecker {
+  private username: string;
+  private password: string;
+  public user: User;
+  public errors = {
+    username: [] as string[],
+    password: [] as string[],
+  };
+
+  constructor(username: string, password: string) {
+    this.username = username;
+    this.password = password;
+  }
+
+  async validate() {
+    if (this.username.trim() === '') {
+      this.errors.username.push('用户名不能为空');
+    }
+    const connection = await getDatabaseConnection();
+    const user = await connection.manager.findOne(User, {
+      where: {
+        username: this.username,
+      },
+    });
+    this.user = user;
+    if (user) {
+      if (user.password_digest !== md5(this.password)) {
+        this.errors.password.push('密码与用户名不匹配');
+      }
+    } else {
+      this.errors.username.push('用户名不存在');
+    }
+  }
+
+  hasErrors() {
+    return this.errors.username.length > 0 || this.errors.password.length > 0;
   }
 }

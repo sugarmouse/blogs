@@ -15,6 +15,7 @@ export default function SignIn() {
     axios.post(`/api/v1/sessions`, formData).then(
       () => {
         // sccess handle
+        setErrors(defaultErrors);
       },
       (error) => {
         if (error instanceof AxiosError && error.response.status === 422) {
