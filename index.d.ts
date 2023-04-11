@@ -1,3 +1,5 @@
+import * as ironsession from "iron-session";
+
 interface PostType {
   id: string,
   created_at: string,
@@ -8,3 +10,10 @@ interface PostType {
   author: undefined,
   comments: undefined;
 }
+
+declare module "iron-session" {
+  import { User } from "./src/entity/User";
+  interface IronSessionData {
+    user?: User;
+  }
+} 

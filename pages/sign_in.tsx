@@ -1,7 +1,16 @@
-import { FormEvent, useCallback, useState } from 'react';
+import { withIronSessionSsr } from 'iron-session/next';
+import { FormEvent, useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { User } from '@/src/entity/User';
+import { withSessionSsr } from '@/lib/withSession';
 
-export default function SignIn() {
+type Props = {
+  user: User;
+};
+
+export default function SignIn(props: Props) {
+  const { user } = props;
+
   const defaultErrors = { username: [], password: [] };
   const [formData, setFromData] = useState({
     username: '',
@@ -30,6 +39,8 @@ export default function SignIn() {
 
   return (
     <>
+      {user.username ? <h1>当前用户登录为 {user.username}</h1> : null}
+
       <h1>Sign In Page</h1>
       {JSON.stringify(formData)}
       <br />
@@ -76,3 +87,13 @@ export default function SignIn() {
     </>
   );
 }
+
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps({ req }) {
+    return {
+      props: {
+        user: req.session.user,
+      },
+    };
+  }
+);

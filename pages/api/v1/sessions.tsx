@@ -2,11 +2,9 @@ import { getDatabaseConnection } from '@/lib/getDBConnection';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@/src/entity/User';
 import md5 from 'md5';
+import { withSession } from '@/lib/withSession';
 
-export default async function Sessions(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function Sessions(req: NextApiRequest, res: NextApiResponse) {
   // get user info from clinet req
   const { username, password } = req.body;
   res.setHeader('Content-type', 'application/json; charset=utf-8');
@@ -19,10 +17,14 @@ export default async function Sessions(
     return;
   } else {
     res.statusCode = 200;
+    req.session.user = sigInChecker.user;
+    await req.session.save();
     res.end(JSON.stringify(sigInChecker.user));
     return;
   }
 }
+
+export default withSession(Sessions);
 
 // todo -> put this to sigle file (but a little bug will show)
 // ReferenceError: Cannot access 'User' before initialization at Module.User
