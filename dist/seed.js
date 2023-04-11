@@ -14,31 +14,30 @@ _dataSource.AppDataSource.initialize().then( /*#__PURE__*/function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log('seeding data into DB...');
             manager = connection.manager;
             u1 = new _User.User();
             u1.username = 'tttht';
             u1.password_digest = 'xxxxx';
-            _context.next = 7;
+            _context.next = 6;
             return manager.save(u1);
-          case 7:
+          case 6:
             p1 = new _Post.Post();
             p1.title = 'first blog';
             p1.content = 'new to here';
             p1.author = u1;
-            _context.next = 13;
+            _context.next = 12;
             return manager.save(p1);
-          case 13:
+          case 12:
             c1 = new _Comment.Comment();
             c1.content = 'great idea';
             c1.post = p1;
             c1.user = u1;
-            _context.next = 19;
+            _context.next = 18;
             return manager.save(c1);
-          case 19:
+          case 18:
             console.log('seeding completed');
             connection.destroy();
-          case 21:
+          case 20:
           case "end":
             return _context.stop();
         }

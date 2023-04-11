@@ -1,4 +1,3 @@
-import { withIronSessionSsr } from 'iron-session/next';
 import { FormEvent, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { User } from '@/src/entity/User';

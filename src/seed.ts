@@ -4,7 +4,6 @@ import { User } from "./entity/User";
 import { Comment } from "./entity/Comment";
 
 AppDataSource.initialize().then(async (connection) => {
-    console.log('seeding data into DB...');
 
     const { manager } = connection;
 
